@@ -11,27 +11,23 @@ import Context, { initialContext } from "./components/store/Context";
 import Hello from "./components/Hello";
 import Card from "./components/Card";
 // import { IContex } from "./components/store/context";
-type jsondata = {
-  id: number;
-  name: string;
-};
 
 function App() {
   const [name, setName] = useState(initialContext.name);
   const [resData, setResData] = useState([]);
-  const getData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=20.5992349&lng=72.9342451&page_type=DESKTOP_WEB_LISTING"
-    );
-    const jsonData = await data.json();
+  // const getData = async () => {
+  //   const data = await fetch(
+  //     "https://www.swiggy.com/dapi/restaurants/list/v5?lat=20.5992349&lng=72.9342451&page_type=DESKTOP_WEB_LISTING"
+  //   );
+  //   const jsonData = await data.json();
 
-    console.log("mydata", jsonData.data.cards[2].data.data.cards);
-    setResData(jsonData.data.cards[2].data.data.cards);
-  };
-  useEffect(() => {
-    getData();
-    console.log(resData);
-  }, []);
+  //   console.log("mydata", jsonData.data.cards[2].data.data.cards);
+  //   setResData(jsonData.data.cards[2].data.data.cards);
+  // };
+  // useEffect(() => {
+  //   getData();
+  //   console.log(resData);
+  // }, []);
 
   return (
     <Context.Provider
