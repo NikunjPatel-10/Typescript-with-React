@@ -1,29 +1,25 @@
-import {
-  Children,
-  ReactNode,
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import ShoppingCart from "../components/ShoppingCart";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface ShopingCartContextProps {
   children: ReactNode;
-}
-interface ShopingCartContext {
-  getItemQuantity: (id: number) => {};
-  increaseCartQuantity: (id: number) => void;
-  decreaseCartQuantity: (id: number) => void;
-  removeFromCart: (id: number) => void;
-  cartItem: CartItem[];
-  cartQuantity: number;
-  openCart: () => void;
-  closeCart: () => void;
 }
 
 interface CartItem {
   id: number;
   quantity: number;
+}
+
+interface ShopingCartContext {
+  getItemQuantity: (id: number) => {};
+  increaseCartQuantity: (id: number) => void;
+  decreaseCartQuantity: (id: number) => void;
+  removeFromCart: (id: number) => void;
+  cartItems: CartItem[];
+  cartQuantity: number;
+  openCart: () => void;
+  closeCart: () => void;
 }
 
 const ShoppingCartContext = createContext({} as ShopingCartContext);
@@ -33,23 +29,26 @@ export function useShoppingCart() {
 }
 
 export function ShoppingCartProvider({ children }: ShopingCartContextProps) {
-  const [cartItem, setCartItem] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
+    "shoping-cart",
+    []
+  );
   const [isOpen, setIsOpen] = useState(false);
-  const [isClose, setIsClose] = useState(true);
+  // const [isClose, setIsClose] = useState(true);
 
   const openCart = () => setIsOpen(true);
-  const closeCart = () => setIsClose(false);
-  const cartQuantity = cartItem.reduce(
+  const closeCart = () => setIsOpen(false);
+  const cartQuantity = cartItems.reduce(
     (quantity, item) => item.quantity + quantity,
     0
   );
 
   function getItemQuantity(id: number) {
-    return cartItem.find((item) => item.id === id)?.quantity || 0;
+    return cartItems.find((item) => item.id === id)?.quantity || 0;
   }
 
   function increaseCartQuantity(id: number) {
-    setCartItem((currItems) => {
+    setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id) == null) {
         return [...currItems, { id, quantity: 1 }];
       } else {
@@ -64,7 +63,7 @@ export function ShoppingCartProvider({ children }: ShopingCartContextProps) {
     });
   }
   function decreaseCartQuantity(id: number) {
-    setCartItem((currItems) => {
+    setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id)?.quantity === 1) {
         return currItems.filter((item) => item.id !== id);
       } else {
@@ -80,7 +79,7 @@ export function ShoppingCartProvider({ children }: ShopingCartContextProps) {
   }
 
   function removeFromCart(id: number) {
-    setCartItem((currItems) => {
+    setCartItems((currItems) => {
       return currItems.filter((item) => item.id !== id);
     });
   }
@@ -91,7 +90,7 @@ export function ShoppingCartProvider({ children }: ShopingCartContextProps) {
         increaseCartQuantity,
         decreaseCartQuantity,
         removeFromCart,
-        cartItem,
+        cartItems,
         cartQuantity,
         openCart,
         closeCart,
