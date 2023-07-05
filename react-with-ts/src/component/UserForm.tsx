@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import "./UserForm.css";
+import { log } from "console";
 
 interface FormValues {
   name: string;
@@ -9,13 +10,6 @@ interface FormValues {
   address: string;
   phone: string;
 }
-
-let initialValues: FormValues = {
-  name: "",
-  email: "",
-  address: "",
-  phone: "",
-};
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -27,36 +21,55 @@ const validationSchema = Yup.object({
 });
 
 const UserForm: React.FC = () => {
+  let initialValues: FormValues = {
+    name: "",
+    email: "",
+    address: "",
+    phone: "",
+  };
+  const [patchValue, setPatchValue] = useState(initialValues);
   const [companyList, setCompanyList] = useState<FormValues[]>([]);
-  const [editingIndex, setEditingIndex] = useState(-1);
+  const [editingIndex, setEditingIndex] = useState<number>(-1);
+  var a: 5 = 5;
+  console.log(a);
 
   const handleSubmit = (
     values: FormValues,
     { resetForm }: FormikHelpers<FormValues>
   ) => {
-    setCompanyList((prev: FormValues[]) => [...prev, values]);
-    console.log(companyList);
+    if (editingIndex === -1) {
+      setCompanyList((prevList: FormValues[]) => [...prevList, values]);
+    } else {
+      const updatedList = [...companyList];
+      updatedList[editingIndex] = values;
+      setCompanyList(updatedList);
+      setEditingIndex(-1);
+      setPatchValue(initialValues); // Reset the patchValue state
+    }
     resetForm();
   };
 
   const editUserData = (index: number) => {
-    setEditingIndex(index);
-    if (index) {
-      initialValues = {
-        name: companyList[index].name,
-        email: companyList[index].email,
-        address: companyList[index].address,
-        phone: companyList[index].phone,
-      };
-      console.log(initialValues);
+    if (index === -1) {
+      setPatchValue({ ...initialValues });
+    } else {
+      const selectedCompany = companyList[index];
+      setPatchValue({ ...selectedCompany });
     }
+    setEditingIndex(index);
+  };
+
+  const deleteUserData = (index: number) => {
+    const updatedList = [...companyList];
+    updatedList.splice(index, 1);
+    setCompanyList(updatedList);
   };
 
   return (
     <div className="wrapper">
       <div className="form-size ">
         <Formik
-          initialValues={initialValues}
+          initialValues={patchValue}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -118,7 +131,7 @@ const UserForm: React.FC = () => {
           <tbody>
             {companyList.map((res: FormValues, index: any) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{res.name}</td>
                   <td>{res.email}</td>
                   <td>{res.address}</td>
@@ -131,7 +144,13 @@ const UserForm: React.FC = () => {
                       >
                         Edit
                       </button>
-                      <button className="delete-btn"> Delete </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteUserData(index)}
+                      >
+                        {" "}
+                        Delete{" "}
+                      </button>
                     </div>
                   </td>
                 </tr>
