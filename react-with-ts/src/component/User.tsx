@@ -6,20 +6,22 @@ type counterState = {
 
 type counterAction = {
   type: string;
-  payload: number;
 };
 
 const initialState = {
   count: 0,
 };
 
-const reducer = (state: any, action: any) => {
+const reducer = (state: counterState, action: counterAction) => {
   switch (action.type) {
     case "increment":
-      return { count: state.count + action.payload };
+      return { ...state, count: state.count + 1 };
 
     case "decrement":
-      return { count: state.count - action.payload };
+      return { ...state, count: state.count - 1 };
+
+    default:
+      throw new Error("unsupported action-type");
   }
 };
 
@@ -29,11 +31,19 @@ const User = () => {
     email: string;
   };
 
+  /**
+   * useState
+   */
   const [user, setUser] = useState<AuthUser>({} as AuthUser);
+  /**
+   * useReducer example
+   */
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  /**
+   * useref
+   */
   const inputRef = useRef<HTMLInputElement>(null);
-  // useEffect(() => {
-  // }, []);
 
   const handleClick = () => {
     setUser({
@@ -51,10 +61,13 @@ const User = () => {
       <button onClick={handleClick}>login</button>
       <p>
         {user.name} {user.email}
-        <button onClick={() => dispatch({ type: "decrement", payload: 10 })}>
+        <button
+          onClick={() => dispatch({ type: "decrement" })}
+          disabled={state.count === 1}
+        >
           Decrement
         </button>
-        <button onClick={() => dispatch({ type: "increment", payload: 10 })}>
+        <button onClick={() => dispatch({ type: "increment" })}>
           Increment
         </button>
         Count : {state?.count}

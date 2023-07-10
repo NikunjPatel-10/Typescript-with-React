@@ -30,33 +30,28 @@ const UserForm: React.FC = () => {
   const [patchValue, setPatchValue] = useState(initialValues);
   const [companyList, setCompanyList] = useState<FormValues[]>([]);
   const [editingIndex, setEditingIndex] = useState<number>(-1);
-  var a: 5 = 5;
-  console.log(a);
 
   const handleSubmit = (
     values: FormValues,
     { resetForm }: FormikHelpers<FormValues>
   ) => {
-    if (editingIndex === -1) {
-      setCompanyList((prevList: FormValues[]) => [...prevList, values]);
-    } else {
-      const updatedList = [...companyList];
-      updatedList[editingIndex] = values;
-      setCompanyList(updatedList);
-      setEditingIndex(-1);
-      setPatchValue(initialValues); // Reset the patchValue state
-    }
+    // if (editingIndex === -1) {
+    setCompanyList((prevList: FormValues[]) => [...prevList, values]);
+    // } else {
+    //   const updatedList = [...companyList];
+    //   updatedList[editingIndex] = values;
+    //   setCompanyList(updatedList);
+    //   setEditingIndex(-1);
+    //   // setPatchValue(initialValues); // Reset the patchValue state
+    // }
     resetForm();
   };
 
   const editUserData = (index: number) => {
-    if (index === -1) {
-      setPatchValue({ ...initialValues });
-    } else {
-      const selectedCompany = companyList[index];
-      setPatchValue({ ...selectedCompany });
-    }
+    const seletedUser = companyList[index];
+    setPatchValue(seletedUser);
     setEditingIndex(index);
+    console.log(patchValue);
   };
 
   const deleteUserData = (index: number) => {
@@ -114,7 +109,6 @@ const UserForm: React.FC = () => {
               />
               <ErrorMessage name="phone" component="div" className="error" />
             </div>
-
             <button type="submit">Submit</button>
           </Form>
         </Formik>

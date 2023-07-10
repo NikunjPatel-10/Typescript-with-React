@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Parent from "./Props/Parent";
@@ -23,6 +23,14 @@ function App() {
       last: "fhdf",
     },
   ];
+  const [resourceType, setResourceType] = useState("post");
+
+  console.log("render");
+
+  useEffect(() => {
+    console.log("resourceType changed");
+  }, [resourceType]);
+
   return (
     <div className="App">
       <ThemeContextProvider>
@@ -31,6 +39,12 @@ function App() {
         <User />
         <Box />
         <UserForm />
+        <div>
+          <button onClick={() => setResourceType("post")}>Post</button>
+          <button onClick={() => setResourceType("users")}>Users</button>
+          <button onClick={() => setResourceType("comments")}>Comments</button>
+        </div>
+        <h1>{resourceType}</h1>
       </ThemeContextProvider>
     </div>
   );
