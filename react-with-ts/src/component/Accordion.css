@@ -1,0 +1,28 @@
+.accordion {
+    width: 100%;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+}
+
+.accordion-header {
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f7f7f7;
+}
+
+.accordion-btn {
+    width: 100%;
+    text-align: left;
+    border: none;
+    background-color: transparent;
+}
+
+.accordion-icon {
+    float: right;
+}
+
+.open {
+    transform: rotate(180deg);
+}

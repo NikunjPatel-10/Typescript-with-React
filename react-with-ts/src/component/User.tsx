@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
+import Accordion from "./Accordion";
 
 type counterState = {
   count: number;
@@ -10,6 +11,39 @@ type counterAction = {
 
 const initialState = {
   count: 0,
+};
+
+type X = {
+  a: string;
+  b: number;
+};
+
+/**
+ * how we extend another tye in type props
+ */
+type Y = X & {
+  c: string;
+  d: number;
+};
+
+interface A {
+  a: string;
+  b: number;
+}
+
+/**
+ * how to extend another type in interface Props
+ */
+interface B extends A {
+  x: string;
+  y: string;
+}
+
+let data: B = {
+  x: "abc",
+  y: "xyz",
+  a: "nikunj",
+  b: 10,
 };
 
 const reducer = (state: counterState, action: counterAction) => {
@@ -58,22 +92,24 @@ const User = () => {
 
   return (
     <>
-      <button onClick={handleClick}>login</button>
-      <p>
-        {user.name} {user.email}
-        <button
-          onClick={() => dispatch({ type: "decrement" })}
-          disabled={state.count === 1}
-        >
-          Decrement
-        </button>
-        <button onClick={() => dispatch({ type: "increment" })}>
-          Increment
-        </button>
-        Count : {state?.count}
-      </p>
       <div>
-        <input type="text" ref={inputRef} onChange={dataHandler} />
+        <button onClick={handleClick}>login</button>
+        <p>
+          {user.name} {user.email}
+          <button
+            onClick={() => dispatch({ type: "decrement" })}
+            disabled={state.count === 1}
+          >
+            Decrement
+          </button>
+          <button onClick={() => dispatch({ type: "increment" })}>
+            Increment
+          </button>
+          Count : {state?.count}
+        </p>
+        <div>
+          <input type="text" ref={inputRef} onChange={dataHandler} />
+        </div>
       </div>
     </>
   );
