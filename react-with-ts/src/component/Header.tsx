@@ -36,6 +36,11 @@ const Header: React.FC = () => {
                 Img-upload
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/drag-and-drop"}>
+                Drag-and-Drop
+              </Link>
+            </li>
           </ul>
           <form className="d-flex" role="search">
             <input

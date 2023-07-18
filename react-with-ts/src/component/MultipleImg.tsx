@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import "./MultipleImg.css";
 
 const MultipleImg = () => {
-  const [selectedImg, setSelectedImg] = useState<any[]>([]);
   const [imgPreview, setImgPreview] = useState<any[]>([]);
 
   const handleFileChanges = (event: any) => {
     const files = Array.from(event.target.files);
-    const selectedFiles = files.slice(0, 5);
-    setSelectedImg(selectedFiles);
+    console.log(files);
+
+    if (files.length > 5) {
+      alert("you can select 5 image only");
+      event.target.files = null;
+      setImgPreview([]);
+      return;
+    }
 
     const preview: any[] = [];
     files.forEach((file: any) => {
@@ -20,18 +26,18 @@ const MultipleImg = () => {
       reader.readAsDataURL(file);
     });
   };
-  const handleUpload = () => {
-    console.log(selectedImg);
-  };
 
   return (
     <div>
+      <label className="custom-file-upload" htmlFor="selectFile">
+        Choose File
+      </label>
       <input
+        id="selectFile"
         type="file"
         multiple
         onChange={(event) => handleFileChanges(event)}
       />
-      <button onClick={handleUpload}>Upload Img</button>
       <div>
         {imgPreview.map((preveiw, index) => {
           return (

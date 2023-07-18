@@ -5,6 +5,7 @@ import Home from "./Home";
 import UserList from "./Users";
 import Accordion from "./Accordion";
 import MultipleImg from "./MultipleImg";
+import DragAndDrop from "./DragAndDrop";
 
 const Routing: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const Routing: React.FC = () => {
       <Route path="/users" element={<UserList />}></Route>
       <Route path="/accordion" element={<Accordion />}></Route>
       <Route path="/img-upload" element={<MultipleImg />}></Route>
+      <Route path="/drag-and-drop" element={<DragAndDrop />}></Route>
     </Routes>
   );
 };

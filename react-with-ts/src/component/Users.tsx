@@ -19,6 +19,7 @@ const UserList = () => {
     setState({ ...state, loading: true });
     UserService.getAllUser()
       .then((res) => {
+        console.log(res);
         setState({
           ...state,
           loading: false,
