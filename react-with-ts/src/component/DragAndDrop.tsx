@@ -1,9 +1,10 @@
 import { log } from "console";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { DragEvent } from "react";
 import "./DragAndDrop.css";
 
 const DragAndDrop = () => {
+  const [text, setText] = useState<string>("");
   const tasks = ["one", "two", "three"];
   const [todo, setTodo] = useState(tasks);
   const [done, setDone] = useState<any[]>([]);
@@ -12,28 +13,47 @@ const DragAndDrop = () => {
     event.preventDefault();
   };
 
-  const handleDragStart = (task: any) => {
+  const handleDragStart = (task: any, list: string, index: number) => {
     return (event: DragEvent<HTMLDivElement>) => {
-      event.dataTransfer.setData("id", task);
+      event.dataTransfer.setData("task", task);
+      event.dataTransfer.setData("list", list);
+      event.dataTransfer.setData("index", index.toString());
     };
   };
 
   const handleToDoDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const data = event.dataTransfer.getData("id");
-    setDone((previous) => previous.filter((task) => task !== data));
-    setTodo((previous) => [...previous, data]);
+    const data = event.dataTransfer.getData("task");
+    const originList = event.dataTransfer.getData("list");
+    const index = parseInt(event.dataTransfer.getData("index"));
+
+    if (originList === "done") {
+      setDone((previous) => previous.filter((_, i) => i !== index));
+      setTodo((previous) => [...previous, data]);
+    }
   };
 
   const handleDoneDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const data = event.dataTransfer.getData("id");
+    const data = event.dataTransfer.getData("task");
+    const originList = event.dataTransfer.getData("list");
+    const index = parseInt(event.dataTransfer.getData("index"));
 
-    setTodo((previous) => previous.filter((task) => task !== data));
-    setDone((previous) => [...previous, data]);
+    if (originList === "todo") {
+      setTodo((previous) => previous.filter((_, i) => i !== index));
+      setDone((previous) => [...previous, data]);
+    }
   };
 
-  const formHandler = () => {};
+  const handleChange = (event: any) => {
+    setText(event.target.value);
+  };
+
+  const formHandler = (e: any) => {
+    e.preventDefault();
+    setTodo((prev: any) => [...prev, text]);
+    setText("");
+  };
 
   return (
     <div className="main-wrapper">
@@ -43,6 +63,8 @@ const DragAndDrop = () => {
             type="text"
             placeholder="enter here..."
             className="form-control"
+            value={text}
+            onChange={handleChange}
           />
           <button className="submit-btn">Go</button>
         </form>
@@ -55,12 +77,12 @@ const DragAndDrop = () => {
         >
           <b>Todo</b>
           <div className="task-list">
-            {todo.map((task) => (
+            {todo.map((task, index) => (
               <div
                 className="task"
                 draggable
-                onDragStart={handleDragStart(task)}
-                key={task}
+                onDragStart={handleDragStart(task, "todo", index)}
+                key={index}
               >
                 {task}
               </div>
@@ -78,7 +100,7 @@ const DragAndDrop = () => {
               <div
                 className="task"
                 draggable
-                onDragStart={handleDragStart(task)}
+                onDragStart={handleDragStart(task, "done", index)}
                 key={index}
               >
                 {task}
