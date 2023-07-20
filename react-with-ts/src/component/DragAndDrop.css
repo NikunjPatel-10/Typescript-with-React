@@ -24,6 +24,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 1em;
     justify-content: space-around;
+    cursor: move;
 }
 
 .card {

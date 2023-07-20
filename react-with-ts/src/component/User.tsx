@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import Accordion from "./Accordion";
+import Tooltip from "./Tooltip";
 
 type counterState = {
   count: number;
@@ -111,6 +112,10 @@ const User = () => {
           <input type="text" ref={inputRef} onChange={dataHandler} />
         </div>
       </div>
+      <h3> tooltip component</h3>
+      <Tooltip text="this is a tooltip">
+        <button> Hoover over me</button>
+      </Tooltip>
     </>
   );
 };

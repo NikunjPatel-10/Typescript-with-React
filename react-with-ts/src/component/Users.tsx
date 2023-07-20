@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Users } from "../Models/Users";
-import { UserService } from "../Service/user-service";
+import { UserService, getAllData } from "../Service/user-service";
 
 interface IState {
   loading: boolean;
@@ -14,6 +14,7 @@ const UserList = () => {
     users: [] as Users[],
     errMess: "",
   });
+  const data = getAllData();
 
   useEffect(() => {
     setState({ ...state, loading: true });
@@ -58,6 +59,8 @@ const UserList = () => {
                 <td>{user.name}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
+                <td>{user.website}</td>
+                <td>{user.phone}</td>
               </tr>
             ))}
         </tbody>
