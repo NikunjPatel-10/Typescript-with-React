@@ -116,6 +116,11 @@ const User = () => {
       <Tooltip text="this is a tooltip">
         <button> Hoover over me</button>
       </Tooltip>
+      <div className="text-bg-primary">Nikunj122</div>
+      <div className=" flex justify-end">
+        <a>LogIn</a>
+        <a>Sign Up</a>
+      </div>
     </>
   );
 };
